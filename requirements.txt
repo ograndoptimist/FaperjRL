@@ -1,0 +1,4 @@
+-e
+keras
+numpy
+pytest
