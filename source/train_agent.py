@@ -34,6 +34,7 @@ def treino(episodios=256,
     memory_replay = MemoryReplay(buffer_size=50)
 
     dqn_agent = DQNAgent()
+    dqn_agent.build_model()
 
     for episodio in range(1, episodios + 1):
         reforco_acumulado = 0
@@ -78,10 +79,9 @@ def treino(episodios=256,
 
         state_array, action_array, reinforcement_array = memory_replay.to_numpy()
 
-        dqn_agent.fit([state_array, action_array], reinforcement_array, epochs=5, verbose=False)
+        dqn_agent.fit(state_array, action_array, reinforcement_array, epochs=5, verbose=False)
 
-        print("Episódio {0}: Reforço acumulado de {1}".format(episodio, reforco_acumulado))
-        print()
-
+        print("Episódio {0}: Reforço acumulado de {1}\n".format(episodio, reforco_acumulado))
+        
         estat_reforcos.update({episodio: reforco_acumulado})
         eps *= epsilon_decay
