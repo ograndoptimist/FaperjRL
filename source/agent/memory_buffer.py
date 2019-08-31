@@ -56,8 +56,9 @@ class MemoryReplay(object):
         return len(self.__deque)
 
     def __str__(self):
+        if len(self) == 0:
+            return "[]"
         string = ""
         for item in self.__deque:
             string += "{0}\n".format(item)
-        return string
-    
+        return string    
