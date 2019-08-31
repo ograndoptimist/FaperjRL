@@ -35,8 +35,6 @@ def treino(episodios=256,
 
     dqn_agent = DQNAgent()
 
-    numero_iteracoes = 0
-
     for episodio in range(1, episodios + 1):
         reforco_acumulado = 0
 
@@ -76,9 +74,7 @@ def treino(episodios=256,
             if terminado:
                 break
 
-            jogo.transicao_estado(escolha)
-
-            numero_iteracoes += 1
+            jogo.transicao_estado(escolha)            
 
         state_array, action_array, reinforcement_array = memory_replay.to_numpy()
 
