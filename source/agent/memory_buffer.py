@@ -40,6 +40,17 @@ class MemoryReplay(object):
         shuffle(shuffled_items)
         self.__deque = MemoryReplay.__rebuild_memory(shuffled_items)
         del shuffled_items
+   
+    def to_numpy(self, max_len):
+        states = np.zeros((len(self), max_len))
+        actions = np.zeros((len(self), max_len))
+        reinforcements = np.zeros((len(self), 1))
+        for cont, memory in zip(range(max_len),
+                                self.__deque):
+            states[cont] = memory['state']
+            actions[cont] = memory['action']
+            reinforcements[cont] = memory['reinforcement']
+        return states, actions, reinforcements
 
     def __len__(self):
         return len(self.__deque)
@@ -49,3 +60,4 @@ class MemoryReplay(object):
         for item in self.__deque:
             string += "{0}\n".format(item)
         return string
+    
