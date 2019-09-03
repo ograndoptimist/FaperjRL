@@ -9,6 +9,8 @@ from source.agent.dqn_agent import DQNAgent
 
 from source.preprocessing.preprocessing import vectorizer 
 
+from source.preprocessing.utils import duck_type
+
 
 def treino(episodios=256,
            batch_size=64,
@@ -64,9 +66,11 @@ def treino(episodios=256,
                 target = prox_reforco + gamma * max(self.Q(proximo_estado, proximas_acoes))
             else:
                 target = prox_reforco
+           
+           acoes_ = duck_type(acoes_, escolha)
 
             memory_replay.add_item(state=estado,
-                                   action=acoes_[escolha],
+                                   action=acoes_,
                                    reinforcement=target)
             
             reforco_acumulado += prox_reforco
