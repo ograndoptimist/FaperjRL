@@ -67,7 +67,7 @@ def treino(episodios=256,
             else:
                 target = prox_reforco
            
-           acoes_ = duck_type(acoes_, escolha)
+            acoes_ = duck_type(acoes_, escolha)
 
             memory_replay.add_item(state=estado,
                                    action=acoes_,
