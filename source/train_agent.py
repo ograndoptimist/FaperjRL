@@ -12,11 +12,11 @@ from source.preprocessing.preprocessing import vectorizer
 from source.preprocessing.utils import duck_type
 
 
-def treino(episodios=256,
-           batch_size=64,
-           epsilon=1.0,
-           epsilon_decay=0.99,
-           gamma=0.95):
+def train_agent(episodes=256,
+                batch_size=64,
+                epsilon=1.0,
+                epsilon_decay=0.99,
+                gamma=0.95):
     """
         Realiza o treinamento do Agente em batch.
         ::batch_size:
@@ -37,54 +37,51 @@ def treino(episodios=256,
     dqn_agent = DQNAgent()
     dqn_agent.build_model()
 
-    for episodio in range(1, episodios + 1):
+    for episode in range(1, episodes + 1):
         reforco_acumulado = 0
 
         jogo = AdmiravelMundoNovo()
 
-        for passo in range(batch_size):
-            # Obtém as descrições de estado e ação do jogo.
+        for step in range(batch_size):
             state_text, action_text, dimensao_acao = jogo.read()
 
-            estado_ = vectorizer(state_text)
-            acoes_ = vectorizer(action_text)
+            state_ = vectorizer(state_text)
+            actions_ = vectorizer(action_text)
 
-            # Seleciona uma ação, escolhida de forma aleatória ou através de max(Q(s, a)).
             if np.random.random() < eps:
-                escolha = np.random.randint(0, dimensao_acao)
+                choice = np.random.randint(0, dimensao_acao)
             else:
-                escolha = np.argmax(self.Q(estado_, acoes_))
+                choice = np.argmax(self.Q(state_, actions_))
 
-            # Executa a ação no emulador e observa o reforço e o próximo estado.
-            proximo_estado_texto, proximas_acoes_texto, prox_dimensao_acao, prox_reforco, terminado = jogo.emulador(escolha)
+            next_state, next_actions, prox_dimensao_acao, prox_reforco, done = jogo.emulador(choice)
 
-            proximo_estado = vectorizer(proximo_estado_texto)
-            proximas_acoes = vectorizer(proximas_acoes_texto)
+            next_state = vectorizer(next_state)
+            next_actions = vectorizer(next_actions)
 
-            if not terminado:
+            if not done:
                 # Q(s, a) = r' +  γ  * Q(s', a')
-                target = prox_reforco + gamma * max(self.Q(proximo_estado, proximas_acoes))
+                target = prox_reforco + gamma * max(self.Q(next_state, next_actions))
             else:
                 target = prox_reforco
            
-            acoes_ = duck_type(acoes_, escolha)
+            action_ = duck_type(actions_, choice)
 
-            memory_replay.add_item(state=estado,
-                                   action=acoes_,
+            memory_replay.add_item(state=state,
+                                   action=action_,
                                    reinforcement=target)
             
             reforco_acumulado += prox_reforco
 
-            if terminado:
+            if done:
                 break
 
-            jogo.transicao_estado(escolha)            
+            jogo.transicao_estado(choice)            
 
         state_array, action_array, reinforcement_array = memory_replay.to_numpy()
 
         dqn_agent.fit(state_array, action_array, reinforcement_array, epochs=5, verbose=False)
 
-        print("Episódio {0}: Reforço acumulado de {1}\n".format(episodio, reforco_acumulado))
+        print("Episódio {0}: Reforço acumulado de {1}\n".format(episode, reforco_acumulado))
         
         estat_reforcos.update({episodio: reforco_acumulado})
         eps *= epsilon_decay
