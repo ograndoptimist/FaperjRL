@@ -25,7 +25,7 @@ class MemoryReplay(object):
         )
 
     def add_item(self, state, action, reinforcement):
-        if len(self) >= self.__max_len:
+        if len(self) == self.__max_len:
             self.__refresh_memory()
         self.__insert_item(state, action, reinforcement)
 
