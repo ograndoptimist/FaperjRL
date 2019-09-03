@@ -1,5 +1,4 @@
 import numpy as np
-import random
 
 from source.emulador.emulador import AdmiravelMundoNovo
 
