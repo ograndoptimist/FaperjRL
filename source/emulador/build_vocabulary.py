@@ -1,7 +1,7 @@
 import re
 
-from textos import ESTADOS as est
-from textos import ACOES as act
+from source.emulador.textos import (ESTADOS as est,
+                                    ACOES as act)
 
 from source.preprocessing.utils import (list_to_dictionary,
                                         save_content)
