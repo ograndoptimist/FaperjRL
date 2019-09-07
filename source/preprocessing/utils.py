@@ -12,3 +12,12 @@ def duck_type(arr, choice):
 		return arr[choice]
 	except TypeError:
 		return arr
+	
+
+def write_vocabulary(path, vocabulary):
+    with open(path, 'w') as file:
+        if isinstance(vocabulary, dict):
+            file.write(str(vocabulary))
+        else:
+            for word in vocabulary:
+                file.write(str(word) + "\n")
