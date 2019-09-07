@@ -1,15 +1,14 @@
-from abc import (ABCMeta,
-                 abstractmethod)
+import abc
 
-
-class Agent(metaclass=ABCMeta):
-    def __init__(self):
-        pass
-
-    @abstractmethod
+class Agent(abc.ABC):
+    @abc.abstractmethod
     def q_value(self, state, action):
-        pass
+        """
+          Obtains the q-value corresponding to the action specified.
+        """
 
-    @abstractmethod
+    @abc.abstractmethod
     def Q(self, state, actions):
-        pass
+        """
+          Obtains all q-values to the all actions on the specified state.
+        """
